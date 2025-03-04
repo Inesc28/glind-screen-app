@@ -4,6 +4,26 @@ import * as Location from 'expo-location';
 import { socket, connectSocket } from '../../utils/socket';
 
 export default function SendScreen(): JSX.Element {
+  const isDarkTheme = true; // Cambia esto a 'false' para usar el tema claro
+
+  const darkThemeStyles = {
+    backgroundColor: '#121212',
+    textColor: '#ffffff',
+    cardColor: '#1e1e1e',
+    borderColor: '#444444',
+    buttonColor: '#ff4444',
+  };
+
+  const lightThemeStyles = {
+    backgroundColor: '#ffffff',
+    textColor: '#000000',
+    cardColor: '#f8f8f8',
+    borderColor: '#cccccc',
+    buttonColor: '#0066cc',
+  };
+
+  const themeStyles = isDarkTheme ? darkThemeStyles : lightThemeStyles;
+
   const [text, setText] = useState<string>(''); // Texto que se enviará en tiempo real
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -72,22 +92,29 @@ export default function SendScreen(): JSX.Element {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: themeStyles.backgroundColor }]}>
       <TextInput
-        style={styles.input}
+        style={[{ color: themeStyles.textColor, borderColor: themeStyles.borderColor }]}
         placeholder="Escribe un texto"
-        onChangeText={handleTextChange} // Capturar y enviar texto en tiempo real
+        placeholderTextColor={themeStyles.textColor} 
+        onChangeText={handleTextChange} 
         value={text}
       />
       {location && (
-        <Text style={styles.location}>
+        <Text style={[styles.location, { color: themeStyles.textColor }]}>
           Ubicación actual: {location.latitude}, {location.longitude}
         </Text>
       )}
-      {errorMsg && <Text style={styles.error}>{errorMsg}</Text>}
+      {errorMsg && (
+        <Text style={[styles.error, { color: themeStyles.buttonColor }]}>
+          {errorMsg}
+        </Text>
+      )}
     </View>
   );
+
 }
+  
 
 const styles = StyleSheet.create({
   container: {
