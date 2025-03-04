@@ -34,6 +34,11 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('locationUpdate', data);
   });
 
+  socket.on('textAndLocationUpdate', (data) => {
+      console.log('Texto y ubicación recibidos:', data);
+      socket.broadcast.emit('textAndLocationUpdate', data); 
+  });
+
   socket.on('disconnect', () => {
     console.log('Cliente desconectado:', socket.id);
   });

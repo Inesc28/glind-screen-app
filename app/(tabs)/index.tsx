@@ -11,6 +11,26 @@ interface LocationData {
 }
 
 export default function ShareScreen() {
+  const isDarkTheme = true; // Cambia esto a 'false' para usar el tema claro
+
+  const darkThemeStyles = {
+    backgroundColor: '#121212',
+    textColor: '#ffffff',
+    buttonColor: '#ff4444',
+    mapBorderColor: '#444444',
+    sharingTextColor: '#bbbbbb',
+  };
+
+  const lightThemeStyles = {
+    backgroundColor: '#ffffff',
+    textColor: '#000000',
+    buttonColor: '#4444ff',
+    mapBorderColor: '#cccccc',
+    sharingTextColor: '#666666',
+  };
+
+  const themeStyles = isDarkTheme ? darkThemeStyles : lightThemeStyles;
+
   const [isSharing, setIsSharing] = useState(false);
   const [location, setLocation] = useState<LocationData | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -42,7 +62,7 @@ export default function ShareScreen() {
       if (Platform.OS !== 'web') {
         await ScreenCapture.preventScreenCaptureAsync();
       }
-      
+
       connectSocket();
       setIsSharing(true);
 
@@ -50,9 +70,8 @@ export default function ShareScreen() {
       const intervalId = setInterval(async () => {
         if (location) {
           socket.emit('screenData', {
-            // In a real implementation, you would capture and send actual screen data
             timestamp: new Date().toISOString(),
-            location: location
+            location: location,
           });
         }
       }, 1000);
@@ -74,15 +93,21 @@ export default function ShareScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: themeStyles.backgroundColor }]}>
       {errorMsg ? (
-        <Text style={styles.errorText}>{errorMsg}</Text>
+        <Text style={[styles.errorText, { color: themeStyles.textColor }]}>{errorMsg}</Text>
       ) : (
         <>
           <View style={styles.mapContainer}>
             {location && (
               <MapView
-                style={styles.map}
+                style={[
+                  styles.map,
+                  {
+                    borderColor: themeStyles.mapBorderColor,
+                    borderWidth: 1,
+                  },
+                ]}
                 initialRegion={{
                   latitude: location.latitude,
                   longitude: location.longitude,
@@ -102,12 +127,12 @@ export default function ShareScreen() {
           </View>
           <View style={styles.controls}>
             <Button
-              title={isSharing ? "Stop Sharing" : "Start Sharing"}
+              title={isSharing ? 'Stop Sharing' : 'Start Sharing'}
               onPress={isSharing ? stopSharing : startSharing}
-              color={isSharing ? "#ff4444" : "#4444ff"}
+              color={themeStyles.buttonColor}
             />
             {isSharing && (
-              <Text style={styles.sharingText}>
+              <Text style={[styles.sharingText, { color: themeStyles.sharingTextColor }]}>
                 Screen sharing is active...
               </Text>
             )}
@@ -121,7 +146,6 @@ export default function ShareScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   mapContainer: {
     flex: 1,
@@ -137,11 +161,9 @@ const styles = StyleSheet.create({
   },
   sharingText: {
     marginTop: 10,
-    color: '#666',
     fontSize: 16,
   },
   errorText: {
-    color: 'red',
     textAlign: 'center',
     margin: 20,
   },

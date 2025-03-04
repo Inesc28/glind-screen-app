@@ -12,6 +12,22 @@ interface ScreenData {
 }
 
 export default function ViewerScreen() {
+  const isDarkTheme = true; // Cambia esto a 'false' para usar el tema claro
+
+  const darkThemeStyles = {
+    backgroundColor: '#121212',
+    textColor: '#ffffff',
+    errorColor: 'red',
+  };
+
+  const lightThemeStyles = {
+    backgroundColor: '#ffffff',
+    textColor: '#000000',
+    errorColor: 'red',
+  };
+
+  const themeStyles = isDarkTheme ? darkThemeStyles : lightThemeStyles;
+
   const [screenData, setScreenData] = useState<ScreenData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,9 +55,9 @@ export default function ViewerScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: themeStyles.backgroundColor }]}>
       {error ? (
-        <Text style={styles.errorText}>{error}</Text>
+        <Text style={[styles.errorText, { color: themeStyles.errorColor }]}>{error}</Text>
       ) : (
         <>
           <View style={styles.mapContainer}>
@@ -67,9 +83,13 @@ export default function ViewerScreen() {
           </View>
           <View style={styles.info}>
             {screenData ? (
-              <Text>Last update: {new Date(screenData.timestamp).toLocaleTimeString()}</Text>
+              <Text style={{ color: themeStyles.textColor }}>
+                Last update: {new Date(screenData.timestamp).toLocaleTimeString()}
+              </Text>
             ) : (
-              <Text>Waiting for shared screen data...</Text>
+              <Text style={{ color: themeStyles.textColor }}>
+                Waiting for shared screen data...
+              </Text>
             )}
           </View>
         </>
@@ -81,7 +101,6 @@ export default function ViewerScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   mapContainer: {
     flex: 1,
@@ -96,8 +115,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   errorText: {
-    color: 'red',
     textAlign: 'center',
     margin: 20,
   },
 });
+
