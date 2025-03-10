@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { View, StyleSheet, Button, Text, Platform } from 'react-native';
-import * as ScreenCapture from 'expo-screen-capture';
 import * as Location from 'expo-location';
 import { socket, connectSocket } from '../../utils/socket';
 import MapView, { Marker } from 'react-native-maps';
@@ -11,7 +10,7 @@ interface LocationData {
 }
 
 export default function ShareScreen() {
-  const isDarkTheme = true; // Cambia esto a 'false' para usar el tema claro
+  const isDarkTheme = true;
 
   const darkThemeStyles = {
     backgroundColor: '#121212',
@@ -59,35 +58,16 @@ export default function ShareScreen() {
 
   const startSharing = async () => {
     try {
-      if (Platform.OS !== 'web') {
-        await ScreenCapture.preventScreenCaptureAsync();
-      }
-
       connectSocket();
       setIsSharing(true);
-
-      // Start periodic screen capture and location updates
-      const intervalId = setInterval(async () => {
-        if (location) {
-          socket.emit('screenData', {
-            timestamp: new Date().toISOString(),
-            location: location,
-          });
-        }
-      }, 1000);
-
-      // Store interval ID for cleanup
-      return () => clearInterval(intervalId);
+      console.log('Conectado al servidor');
     } catch (error) {
-      console.error('Error starting screen share:', error);
-      setErrorMsg('Failed to start screen sharing');
+      console.error('Error connecting to server:', error);
+      setErrorMsg('Failed to connect to the server');
     }
   };
 
   const stopSharing = async () => {
-    if (Platform.OS !== 'web') {
-      await ScreenCapture.allowScreenCaptureAsync();
-    }
     socket.disconnect();
     setIsSharing(false);
   };
@@ -127,13 +107,13 @@ export default function ShareScreen() {
           </View>
           <View style={styles.controls}>
             <Button
-              title={isSharing ? 'Stop Sharing' : 'Start Sharing'}
+              title={isSharing ? 'Stop Sharing' : 'Iniciar Servidor'}
               onPress={isSharing ? stopSharing : startSharing}
               color={themeStyles.buttonColor}
             />
             {isSharing && (
               <Text style={[styles.sharingText, { color: themeStyles.sharingTextColor }]}>
-                Screen sharing is active...
+                Conectado al servidor...
               </Text>
             )}
           </View>

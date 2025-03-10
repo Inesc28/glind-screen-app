@@ -37,25 +37,16 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Share Screen',
+          title: 'Inicio',
           tabBarIcon: ({ size, color }) => (
-            <Ionicons name="share-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="viewer"
-        options={{
-          title: 'View Screen',
-          tabBarIcon: ({ size, color }) => (
-            <Ionicons name="eye-outline" size={size} color={color} />
+            <Ionicons name="home-outline" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="SendScreen"
         options={{
-          title: 'Send Data',
+          title: 'Enviar Datos',
           tabBarIcon: ({ size, color }) => (
             <Ionicons name="send-outline" size={size} color={color} />
           ),
@@ -64,7 +55,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="ViewDataScreen"
         options={{
-          title: 'View Data',
+          title: 'Ver Datos',
           tabBarIcon: ({ size, color }) => (
             <Ionicons name="document-text-outline" size={size} color={color} />
           ),

@@ -10,7 +10,7 @@ interface LocationData {
 }
 
 export default function ViewDataScreen(): JSX.Element {
-  const isDarkTheme = true; // Cambia esto a 'false' para usar el tema claro
+  const isDarkTheme = true; 
 
   const darkThemeStyles = {
     backgroundColor: '#121212',
@@ -31,18 +31,16 @@ export default function ViewDataScreen(): JSX.Element {
   const themeStyles = isDarkTheme ? darkThemeStyles : lightThemeStyles;
 
   const [receivedText, setReceivedText] = useState<string>(''); // Texto recibido en tiempo real
-  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null); // Ubicación recibida
-  const [errorMsg, setErrorMsg] = useState<string | null>(null); // Manejo de errores
-  const [modalVisible, setModalVisible] = useState<boolean>(false); // Control del modal
+  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null); 
+  const [errorMsg, setErrorMsg] = useState<string | null>(null); 
+  const [modalVisible, setModalVisible] = useState<boolean>(false); 
 
   useEffect(() => {
-    // Conecta al socket
     connectSocket();
 
     // Escuchar las actualizaciones de texto y ubicación en tiempo real
     socket.on('textAndLocationUpdate', (data: LocationData) => {
       try {
-        // Actualiza texto y ubicación
         setReceivedText(data.text);
         setLocation({ latitude: data.latitude, longitude: data.longitude });
       } catch (error) {
@@ -53,8 +51,8 @@ export default function ViewDataScreen(): JSX.Element {
 
     // Limpiar conexión al desmontar la pantalla
     return () => {
-      socket.off('textAndLocationUpdate'); // Remueve el listener
-      socket.disconnect(); // Desconecta el socket
+      socket.off('textAndLocationUpdate'); 
+      socket.disconnect(); 
     };
   }, []);
 
@@ -78,8 +76,8 @@ export default function ViewDataScreen(): JSX.Element {
               Ubicación: {location.latitude.toFixed(6)}, {location.longitude.toFixed(6)}
             </Text>
             <Button
-              title="View Location"
-              onPress={() => setModalVisible(true)} // Abre el modal
+              title="Ver Ubicación"
+              onPress={() => setModalVisible(true)} 
               color={themeStyles.buttonColor}
             />
           </>
@@ -89,12 +87,11 @@ export default function ViewDataScreen(): JSX.Element {
         {errorMsg && <Text style={[styles.error, { color: 'red' }]}>{errorMsg}</Text>}
       </View>
 
-      {/* Modal con el mapa */}
       <Modal
         visible={modalVisible}
         animationType="slide"
         transparent={true}
-        onRequestClose={() => setModalVisible(false)} // Cierra el modal al presionar atrás
+        onRequestClose={() => setModalVisible(false)} 
       >
         <View style={styles.modalContainer}>
           {location && (

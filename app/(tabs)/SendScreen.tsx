@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TextInput, Text } from 'react-native';
 import * as Location from 'expo-location';
-import { socket, connectSocket } from '../../utils/socket';
+import { socket } from '../../utils/socket';
 
 export default function SendScreen(): JSX.Element {
-  const isDarkTheme = true; // Cambia esto a 'false' para usar el tema claro
+  const isDarkTheme = true; 
 
   const darkThemeStyles = {
     backgroundColor: '#121212',
@@ -28,13 +28,6 @@ export default function SendScreen(): JSX.Element {
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Configurar y conectar al socket al iniciar la vista
-  useEffect(() => {
-    connectSocket();
-    return () => {
-      socket.disconnect(); // Desconectar al desmontar
-    };
-  }, []);
 
   // Obtener la ubicación inicial al cargar la pantalla
   useEffect(() => {
