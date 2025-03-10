@@ -1,4 +1,4 @@
-# GLIND SPY APP AND SHOW SCREEN
+# Glind Spy App
 
 Glind is a mobile application, dedicated to spying on smartphones and users' keystrokes. It is a keylogger, with the feat that this application has the functionality of showing the screen and location of the spied user.
 
